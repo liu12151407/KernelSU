@@ -11,23 +11,31 @@ jobs:
     secrets: inherit
   build-a12-kernel:
     uses: ./.github/workflows/build-kernel-a12.yml
+    secrets: inherit
   build-a13-kernel:
     uses: ./.github/workflows/build-kernel-a13.yml
+    secrets: inherit
+  build-a14-kernel:
+    uses: ./.github/workflows/build-kernel-a14.yml
+    secrets: inherit
   build-wsa-kernel:
     uses: ./.github/workflows/build-kernel-wsa.yml
+    secrets: inherit
   build-arcvm-kernel:
     uses: ./.github/workflows/build-kernel-arcvm.yml
+    secrets: inherit
   release:
     needs:
       - build-manager
       - build-a12-kernel
       - build-a13-kernel
+      - build-a14-kernel
       - build-wsa-kernel
       - build-arcvm-kernel
     runs-on: ubuntu-latest
     steps:
       - name: Download artifacts
-        uses: actions/download-artifact@v3
+        uses: actions/download-artifact@v4
       - name: Zip AnyKernel3
         run: |
           for dir in AnyKernel3-*; do
@@ -59,11 +67,13 @@ jobs:
         run: ls -R
 
       - name: release
-        uses: softprops/action-gh-release@v1
+        uses: softprops/action-gh-release@v2
         with:
           files: |
             manager/*.apk
+            android*-lkm/*_kernelsu.ko
             AnyKernel3-*.zip
             boot-images-*/Image-*/*.img.gz
             kernel-WSA*.zip
             kernel-ARCVM*.zip
+            ksud-*

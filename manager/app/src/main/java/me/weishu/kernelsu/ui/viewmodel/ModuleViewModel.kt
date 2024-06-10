@@ -1,6 +1,5 @@
 package me.weishu.kernelsu.ui.viewmodel
 
-import android.net.Uri
 import android.os.SystemClock
 import android.util.Log
 import androidx.compose.runtime.derivedStateOf
@@ -16,7 +15,7 @@ import me.weishu.kernelsu.ui.util.overlayFsAvailable
 import org.json.JSONArray
 import org.json.JSONObject
 import java.text.Collator
-import java.util.*
+import java.util.Locale
 
 class ModuleViewModel : ViewModel() {
 
@@ -36,6 +35,7 @@ class ModuleViewModel : ViewModel() {
         val update: Boolean,
         val remove: Boolean,
         val updateJson: String,
+        val hasWebUi: Boolean,
     )
 
     data class ModuleUpdateInfo(
@@ -96,7 +96,8 @@ class ModuleViewModel : ViewModel() {
                             obj.getBoolean("enabled"),
                             obj.getBoolean("update"),
                             obj.getBoolean("remove"),
-                            obj.optString("updateJson")
+                            obj.optString("updateJson"),
+                            obj.optBoolean("web")
                         )
                     }.toList()
                 isNeedRefresh = false
